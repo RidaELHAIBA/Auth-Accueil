@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Login</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            background: url('https://images.unsplash.com/photo-1604423203943-54721eff418a?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .wrapper {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 40px;
+            width: 350px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: #fff;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .input-field {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #fff;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-field label {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            color: #ccc;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .input-field input:focus ~ label,
+        .input-field input:valid ~ label {
+            top: -15px;
+            font-size: 12px;
+            color: #ffcc70;
+        }
+
+        .forget {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .forget a {
+            color: #ffcc70;
+            text-decoration: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #ffcc70;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #ffaa00;
+        }
+
+        .register {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .register a {
+            color: #ffcc70;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <form th:action="@{/login}" method="POST">
+        <h2>Login</h2>
+
+        <div th:if="${param.error}" style="color: #ff7070; text-align: center; margin-bottom: 15px;">
+            Les informations sont incorrectes. Veuillez réessayer.
+        </div>
+
+        <div class="input-field">
+            <input type="email" name="username" placeholder="Email" required>
+
+        </div>
+
+        <div class="input-field">
+            <input type="password" name="password" placeholder="Password" required>
+
+        </div>
+
+        <div class="forget">
+            <label for="remember">
+                <input type="checkbox" id="remember"> Remember me
+            </label>
+            <a th:href="@{/register}">Forgot?</a>
+        </div>
+
+        <button type="submit">Log In</button>
+
+        <div class="register">
+            <p>Don't have an account? <a th:href="@{/register}">Register</a></p>
+        </div>
+    </form>
+</div>
+</body>
+</html>

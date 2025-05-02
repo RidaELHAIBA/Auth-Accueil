@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        .wiss {
+            width: 50%;
+            margin: auto;
+            display: block;
+            padding: 12px;
+            background: #ffcc70;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+
+        }
+        .input-field {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #fff;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+        h2{
+            text-align: center;
+        }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: url('https://images.unsplash.com/photo-1604423203943-54721eff418a?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 220px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px 10px;
+            height: 100vh;
+            color: white;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .sidebar button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #ffcc70;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .main {
+            flex-grow: 1;
+            padding: 40px;
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        input, select {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        .wiss2{
+            margin: auto;
+            display: block;
+            padding: 12px;
+            background: #ffcc70;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+
+        }
+
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <h2>Admin Panel</h2>
+    <button onclick="showSection('addUser')">Ajouter utilisateur</button>
+    <button onclick="showSection('stats')">Statistiques du site</button>
+</div>
+
+<div class="main">
+    <!-- Ajouter utilisateur -->
+    <div id="addUser" class="section">
+        <h2>Ajouter un utilisateur</h2>
+        <form th:action="@{/admin/add}" method="post" th:object="${newUser}">
+            <div class="input-field">
+                <input type="text" name="username" th:field="*{username}" placeholder="Username" required>
+
+            </div>
+
+            <div class="input-field">
+                <input type="email" name="email" th:field="*{email}" placeholder="Email" required>
+
+            </div>
+
+            <div class="input-field">
+                <input type="password" name="password" th:field="*{password}" placeholder="Password" required>
+
+            </div>
+
+            <div class="input-field">
+                <input type="password" name="repeatPassword" placeholder="Repeat Password" required>
+
+            </div>
+            <div class="input-field">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            </div>
+
+            <button type="submit" class="wiss">Ajouter</button>
+        </form>
+    </div>
+
+    <!-- Statistiques -->
+    <div id="stats" class="section">
+        <h2>Statistiques du site</h2>
+        <div class="card">👥 Nombre d’utilisateurs : <span th:text="${totalUsers}"></span></div>
+        <div class="card">🛡️ Nombre d’administrateurs : <span th:text="${totalAdmins}"></span></div>
+        <div class="card">🔄 Nombre de connexions : <span th:text="${totalLogins}"></span></div>
+        <h2>Liste des utilisateurs</h2>
+        <div style="overflow-x:auto;">
+            <table style="width: 100%; border-collapse: collapse; background-color: rgba(255, 255, 255, 0.1); color: white;">
+                <thead>
+                <tr>
+                    <th style="padding: 15px; border-bottom: 1px solid white;">Nom</th>
+                    <th style="padding: 15px; border-bottom: 1px solid white;">Rôle</th>
+                    <th style="padding: 15px; border-bottom: 1px solid white;">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td style="padding: 15px; border-bottom: 1px solid white;" th:text="${user.username}">Nom</td>
+                    <td style="padding: 15px; border-bottom: 1px solid white;" th:text="${user.role}">Rôle</td>
+                    <td style="padding: 15px; border-bottom: 1px solid white;">
+                        <form th:action="@{/admin/delete/{id}(id=${user.id})}" method="post"
+                              onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="wiss2">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>a
+
+<script>
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+        document.getElementById(id).classList.add('visible');
+    }
+</script>
+</body>
+</html>
